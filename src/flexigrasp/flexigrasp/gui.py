@@ -30,12 +30,12 @@ class GuiNode(Node):
         self.names = list(self.get_parameter("finger_names").value)
         self.prefix = str(self.get_parameter("topic_prefix").value).strip("/")
         self.viewer = None  # set by main()
-        self.clients = {}
+        self.rezero_clients = {}
         for name in self.names:
             self.create_subscription(TactileFrame, f"/{self.prefix}/{name}/frame",
                                      lambda m, n=name: self._on_frame(n, m), qos_profile_sensor_data)
-            self.clients[name] = self.create_client(Trigger, f"/{self.prefix}/{name}/rezero")
-        self.clients[None] = self.create_client(Trigger, f"/{self.prefix}/rezero_all")
+            self.rezero_clients[name] = self.create_client(Trigger, f"/{self.prefix}/{name}/rezero")
+        self.rezero_clients[None] = self.create_client(Trigger, f"/{self.prefix}/rezero_all")
 
     def _on_frame(self, name: str, m: TactileFrame) -> None:
         if self.viewer is None:
@@ -52,7 +52,7 @@ class GuiNode(Node):
             bad_frames=m.bad_frames, dropped_bytes=m.dropped_bytes, rate_hz=m.rate_hz))
 
     def rezero(self, name) -> None:
-        cli = self.clients[name]
+        cli = self.rezero_clients[name]
         if not cli.service_is_ready():
             self.get_logger().warn("re-zero service not available (is flexigrasp_node running?)")
             return
