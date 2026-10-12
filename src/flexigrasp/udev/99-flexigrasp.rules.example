@@ -1,0 +1,17 @@
+# Give each pad a stable name so left/right never swap after a reboot or re-plug.
+#
+# Arduino Nano clones (CH340) usually have NO serial number, so /dev/serial/by-id cannot tell two
+# of them apart. Match on the physical USB port instead:
+#
+#   1. Plug the LEFT pad into the port you want to use for it, then run:
+#        udevadm info -a -n /dev/ttyUSB0 | grep -E 'KERNELS|idVendor|idProduct'
+#      and note the KERNELS value of the USB port (looks like "1-2.3").
+#   2. Do the same for the RIGHT pad.
+#   3. Copy this file to /etc/udev/rules.d/99-flexigrasp.rules, replace the KERNELS values, then:
+#        sudo udevadm control --reload-rules && sudo udevadm trigger
+#   4. Set  left.port: /dev/flexitac_left   and   right.port: /dev/flexitac_right   in the YAML.
+#
+# If your pads have FTDI chips with unique serials, match ATTRS{serial}=="XXXX" instead.
+
+SUBSYSTEM=="tty", KERNELS=="1-2.3", SYMLINK+="flexitac_left"
+SUBSYSTEM=="tty", KERNELS=="1-2.4", SYMLINK+="flexitac_right"

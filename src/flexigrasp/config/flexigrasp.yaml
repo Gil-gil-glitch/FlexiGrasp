@@ -1,0 +1,30 @@
+# Parameters for flexigrasp_node (and flexigrasp_gui where noted).
+# Use with:  ros2 launch flexigrasp flexigrasp.launch.py
+flexigrasp_node:
+  ros__parameters:
+    finger_names: [left, right]
+    baud: 2000000
+    baseline_frames: 30          # frames averaged (median) for the baseline at start / re-zero
+    contact_threshold: 15.0      # counts above baseline for a taxel to count as touched
+    contact_min_taxels: 2        # taxels needed before in_contact is true
+    publish_image: true          # also publish sensor_msgs/Image (mono8) per finger
+    topic_prefix: flexigrasp     # topics: /<prefix>/<finger>/frame and /image
+    demo: false                  # true = simulated pads (no hardware)
+    demo_glitch: false           # true = also drop random bytes in demo mode
+
+    left:
+      port: /dev/ttyUSB0
+      frame_id: left_finger_tactile
+      mask: ""                   # taxels to ignore, "row,col;row,col", e.g. "0,10;0,11;0,12;1,30;2,30"
+    right:
+      port: /dev/ttyUSB1
+      frame_id: right_finger_tactile
+      mask: ""
+
+flexigrasp_gui:
+  ros__parameters:
+    finger_names: [left, right]
+    topic_prefix: flexigrasp
+    window_s: 15.0               # length of the time plot
+    delta_range: 120.0           # +/- color range of the delta heatmap
+    contact_threshold: 15.0
