@@ -64,7 +64,7 @@ ros2 bag record /flexigrasp/left/frame /flexigrasp/right/frame /joint_states
 
 ### Pad → load with coins (13 Nov 2026)
 
-![Coin calibration: three repeats, loading and unloading](docs/coin_calibration.png)
+![Coin calibration: three repeats, loading and unloading](coin_calibration.png)
 
 **Setup.** Left pad on the X6 finger, facing up and level. 10-yen coins (4.5 g each, 23.5 mm across),
 stacked centred with no plate, 0 → 45 g → 0 in 4.5 g steps, about 5 s per step, 3 repeats without
